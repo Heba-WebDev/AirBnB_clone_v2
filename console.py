@@ -79,7 +79,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, arg):
         """Creates a new instance of a class"""
-        args = arg.split()
+        args = arg.split(" ")
         if len(args) == 0:
             print("** class name missing **")
             return False
