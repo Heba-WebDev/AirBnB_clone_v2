@@ -61,7 +61,7 @@ class HBNBCommand(cmd.Cmd):
             if "=" in arg:
                 key, value = arg.split('=', 1)
 
-                if value[0] == '"' and value[-1] == '"':
+                if value[0] == '"':
                     value = shlex.split(value)
                     value = value[0].replace('_', ' ')
                 else:
