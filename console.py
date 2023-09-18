@@ -66,12 +66,9 @@ class HBNBCommand(cmd.Cmd):
                     value = value[0].replace('_', ' ')
                 else:
                     try:
-                        value = int(value)
-                    except ValueError:
-                        try:
-                            value = float(value)
-                        except ValueError:
-                            continue
+                        value = eval(value)
+                    except (ValueError, TypeError):
+                        continue
 
                 new_dict[key] = value
 
@@ -85,8 +82,9 @@ class HBNBCommand(cmd.Cmd):
             return False
         if args[0] in classes:
             new_dict = self.create_dict(args[1:])
-            inst_class = classes.get(args[0])
-            new_instance = inst_class(**new_dict)
+            # inst_class = classes.get(args[0])
+            new_instance = eval(args[0])(**new_dict)
+            storage.new(new_instance)
         else:
             print("** class doesn't exist **")
             return False
