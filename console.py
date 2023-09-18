@@ -53,41 +53,33 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def create_dict(self, args):
-        """Creates a dictionary from a list of strings."""
-        new_dict = {}
-
-        for arg in args:
-            if "=" in arg:
-                key, value = arg.split('=', 1)
-
-                if value[0] == '"':
-                    value = shlex.split(value)
-                    value = value[0].replace('_', ' ')
-                else:
-                    try:
-                        value = eval(value)
-                    except (ValueError, TypeError):
-                        continue
-
-                new_dict[key] = value
-
-        return new_dict
-
     def do_create(self, arg):
         """Creates a new instance of a class"""
         args = arg.split(" ")
         if len(args) == 0:
             print("** class name missing **")
             return False
-        if args[0] in classes:
-            new_dict = self.create_dict(args[1:])
-            # inst_class = classes.get(args[0])
-            new_instance = eval(args[0])(**new_dict)
-            storage.new(new_instance)
-        else:
+        class_name = args[0]
+
+        if class_name not in classes:
             print("** class doesn't exist **")
             return False
+
+        new_dict = {}
+        for arg in args[1:]:
+            if "=" in arg:
+                key, value = arg.split('=', 1)
+                if value[0] == '"':
+                    value = value.strip('"').replace('_', ' ')
+                else:
+                    try:
+                        value = eval(value)
+                    except (ValueError, TypeError):
+                        continue
+                new_dict[key] = value
+
+        new_instance = classes[class_name](**new_dict)
+        storage.new(new_instance)
         print(new_instance.id)
         new_instance.save()
 
