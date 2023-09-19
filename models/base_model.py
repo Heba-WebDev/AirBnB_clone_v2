@@ -45,12 +45,11 @@ class BaseModel:
         """Returns a dictionary containing all \
             keys/values of __dict__ of the instance."""
         dict_copy = self.__dict__.copy()
+        dict_copy["__class__"] = str(type(self).__name__)
         dict_copy["created_at"] = self.created_at.isoformat()
         dict_copy["updated_at"] = self.updated_at.isoformat()
-        dict_copy["__class__"] = str(type(self).__name__)
-        dict_copy.pop('_sa_instance_state', None)
-
-        return (dict_copy)
+        dict_copy.pop("_sa_instance_state", None)
+        return dict_copy
 
     def delete(self):
         """Delete current instance from storage."""
