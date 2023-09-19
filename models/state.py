@@ -3,6 +3,7 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, DateTime, String, ForeignKey
 from sqlalchemy.orm import relationship
+from models.city import City
 import os
 import models
 
@@ -17,5 +18,5 @@ class State(BaseModel, Base):
     @property
     def cities(self):
         """Return list of related City objects."""
-        return [city for city in models.storage.all('City').values()
+        return [city for city in models.storage.all(City).values()
                 if city.state_id == self.id]
