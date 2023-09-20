@@ -202,11 +202,11 @@ class HBNBCommand(cmd.Cmd):
                 self.do_all(my_list[0])
             elif action == "count()":
                 self.count(my_list[0])
-            elif action.startswith("show"):
+            elif my_list[1][:4] == "show":
                 self.do_show(args)
-            elif action.startswith("destroy"):
+            elif my_list[1][:7] == "destroy":
                 self.do_destroy(args)
-            elif action.startswith("update"):
+            elif my_list[1][:6] == "update":
                 if isinstance(args, list):
                     obj = storage.all()
                     key = args[0] + ' ' + args[1]
@@ -221,13 +221,13 @@ class HBNBCommand(cmd.Cmd):
         """Strip given arguments to return a string."""
         new_list = [args[0]]
         try:
-            my_dict = eval(args[1][args[1].find('{'):args[1].find('}') + 1])
+            _dict = eval(args[1][args[1].find('{'):args[1].find('}') + 1])
         except Exception:
-            my_dict = None
+            _dict = None
 
         new_str = args[1][args[1].find('(') + 1:args[1].find(')')]
-        if isinstance(my_dict, dict):
-            new_list.extend([(new_str.split(", "))[0].strip('"'), my_dict])
+        if isinstance(_dict, dict):
+            new_list.extend([(new_str.split(", "))[0].strip('"'), _dict])
         else:
             new_list.append(" ".join(new_str.split(", ")))
 
