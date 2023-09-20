@@ -219,19 +219,21 @@ class HBNBCommand(cmd.Cmd):
 
     def _parse(self, args):
         """Strip given arguments to return a string."""
-        new_list = [args[0]]
+        new_list = []
+        new_list.append(args[0])
         try:
-            _dict = eval(args[1][args[1].find('{'):args[1].find('}') + 1])
+            _dict = eval(
+                args[1][args[1].find('{'):args[1].find('}')+1])
         except Exception:
             _dict = None
-
-        new_str = args[1][args[1].find('(') + 1:args[1].find(')')]
         if isinstance(_dict, dict):
-            new_list.extend([(new_str.split(", "))[0].strip('"'), _dict])
-        else:
-            new_list.append(" ".join(new_str.split(", ")))
-
-        return " ".join(new_list)
+            new_str = args[1][args[1].find('(')+1:args[1].find(')')]
+            new_list.append(((new_str.split(", "))[0]).strip('"'))
+            new_list.append(_dict)
+            return new_list
+        new_str = args[1][args[1].find('(')+1:args[1].find(')')]
+        new_list.append(" ".join(new_str.split(", ")))
+        return " ".join(i for i in new_list)
 
 
 if __name__ == '__main__':
