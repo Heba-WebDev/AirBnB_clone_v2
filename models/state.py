@@ -9,7 +9,7 @@ import models
 
 class State(BaseModel, Base):
     """ State class """
-    __tablename__ = 'State'
+    __tablename__ = 'states'
     name = Column(String(128), nullable=False)
     cities = relationship('City', cascade='delete', backref='State')
 
@@ -17,5 +17,5 @@ class State(BaseModel, Base):
     @property
     def cities(self):
         """Return list of related City objects."""
-        return [city for city in models.storage.all('City').values()
+        return [city for city in models.storage.all(City).values()
                 if city.state_id == self.id]
