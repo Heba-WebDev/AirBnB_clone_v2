@@ -10,6 +10,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+from shlex import split
 import shlex
 
 classes = {
@@ -55,33 +56,35 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, arg):
         """Creates a new instance of a class"""
-        args = arg.split(" ")
-        if len(args) == 0:
-            print("** class name missing **")
-            return False
-        class_name = args[0]
+        try:
+            if not arg:
+                raise SyntaxError()
+            my_list = arg.split(" ")
 
-        if class_name not in classes:
-            print("** class doesn't exist **")
-            return False
-
-        new_dict = {}
-        for arg in args[1:]:
-            if "=" in arg:
-                key, value = arg.split('=', 1)
+            kwargs = {}
+            for i in range(1, len(my_list)):
+                key, value = tuple(my_list[i].split("="))
                 if value[0] == '"':
-                    value = value.strip('"').replace('_', ' ')
+                    value = value.strip('"').replace("_", " ")
                 else:
                     try:
                         value = eval(value)
-                    except (ValueError, TypeError):
+                    except (SyntaxError, NameError):
                         continue
-                new_dict[key] = value
+                kwargs[key] = value
 
-        new_instance = classes[class_name](**new_dict)
-        storage.new(new_instance)
-        print(new_instance.id)
-        new_instance.save()
+            if kwargs == {}:
+                obj = eval(my_list[0])()
+            else:
+                obj = eval(my_list[0])(**kwargs)
+                storage.new(obj)
+            print(obj.id)
+            obj.save()
+
+        except SyntaxError:
+            print("** class name missing **")
+        except NameError:
+            print("** class doesn't exist **")
 
     def help_create(self):
         """ Help information for the create method """
