@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 """ Place Module for HBNB project """
 import models
 from models.review import Review
@@ -7,6 +8,7 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from os import getenv
+
 
 place_amenity = Table('place_amenity', Base.metadata,
                       Column('place_id', String(60), ForeignKey('places.id'),
@@ -32,19 +34,20 @@ class Place(BaseModel, Base):
     amenity_ids = []
 
     reviews = relationship('Review', backref='place', cascade='delete')
-    amenities = relationship('Amenity', secondary='place_amenity',
-                             viewonly=False)
 
     @property
     def amenities(self):
-        """Return list of Amenity instances"""
-        return self.amenity_ids
+        """Get a list of all linked Amenities."""
+        amenity_list = []
+        for amenity in models.storage.all(Amenity).values():
+            if amenity.id in self.amenity_ids:
+                amenity_list.append(amenity)
+        return amenity_list
 
     @amenities.setter
-    def amenities(self, obj=None):
-        """Add Amenity.id to amenity_ids"""
-        if obj and type(obj) == Amenity:
-            self.amenity_ids.append(obj.id)
+    def amenities(self, value):
+        if isinstance(value, Amenity):
+            self.amenity_ids.append(value.id)
 
     if getenv("HBNB_TYPE_STORAGE", None) != "db":
         @property
