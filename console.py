@@ -193,47 +193,45 @@ class HBNBCommand(cmd.Cmd):
 
     def default(self, line):
         """Process instances of a class."""
-        my_list = line.split('.')
-        if len(my_list) >= 2:
-            action = my_list[1]
-            args = self._parse(my_list)
-
-            if action == "all()":
-                self.do_all(my_list[0])
-            elif action == "count()":
-                self.count(my_list[0])
-            elif my_list[1][:4] == "show":
-                self.do_show(args)
-            elif my_list[1][:7] == "destroy":
-                self.do_destroy(args)
-            elif my_list[1][:6] == "update":
-                if isinstance(args, list):
+        new_list = line.split('.')
+        if len(new_list) >= 2:
+            if new_list[1] == "all()":
+                self.do_all(new_list[0])
+            elif new_list[1] == "count()":
+                self.count(new_list[0])
+            elif new_list[1][:4] == "show":
+                self.do_show(self._parse(new_list))
+            elif new_list[1][:7] == "destroy":
+                self.do_destroy(self._parse(new_list))
+            elif new_list[1][:6] == "update":
+                tokens = self._parse(new_list)
+                if isinstance(tokens, list):
                     obj = storage.all()
-                    key = args[0] + ' ' + args[1]
-                    for k, v in args[2].items():
+                    key = tokens[0] + ' ' + tokens[1]
+                    for k, v in tokens[2].items():
                         self.do_update(key + ' "{}" "{}"'.format(k, v))
                 else:
-                    self.do_update(args)
+                    self.do_update(tokens)
         else:
             cmd.Cmd.default(self, line)
 
     def _parse(self, args):
         """Strip given arguments to return a string."""
-        new_list = []
-        new_list.append(args[0])
+        my_list = []
+        my_list.append(args[0])
         try:
-            _dict = eval(
+            my_dict = eval(
                 args[1][args[1].find('{'):args[1].find('}')+1])
         except Exception:
-            _dict = None
-        if isinstance(_dict, dict):
-            new_str = args[1][args[1].find('(')+1:args[1].find(')')]
-            new_list.append(((new_str.split(", "))[0]).strip('"'))
-            new_list.append(_dict)
-            return new_list
-        new_str = args[1][args[1].find('(')+1:args[1].find(')')]
-        new_list.append(" ".join(new_str.split(", ")))
-        return " ".join(i for i in new_list)
+            my_dict = None
+        if isinstance(my_dict, dict):
+            cmd_string = args[1][args[1].find('(')+1:args[1].find(')')]
+            my_list.append(((cmd_string.split(", "))[0]).strip('"'))
+            my_list.append(my_dict)
+            return my_list
+        cmd_string = args[1][args[1].find('(')+1:args[1].find(')')]
+        my_list.append(" ".join(cmd_string.split(", ")))
+        return " ".join(cmd for cmd in my_list)
 
 
 if __name__ == '__main__':
