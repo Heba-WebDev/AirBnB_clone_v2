@@ -35,23 +35,23 @@ class Place(BaseModel, Base):
 
     reviews = relationship('Review', backref='place', cascade='delete')
 
-    @property
-    def amenities(self):
-        """Get a list of all linked Amenities."""
-        amenity_list = []
-        for amenity in models.storage.all(Amenity).values():
-            if amenity.id in self.amenity_ids:
-                amenity_list.append(amenity)
-        return amenity_list
-
-    @amenities.setter
-    def amenities(self, value):
-        if isinstance(value, Amenity):
-            self.amenity_ids.append(value.id)
-
     if getenv("HBNB_TYPE_STORAGE", None) != "db":
         @property
         def reviews(self):
             """Return list of related Review objects."""
             return [review for review in models.storage.all(Review).values()
                     if review.place_id == Place.id]
+
+        @property
+        def amenities(self):
+            """Get a list of all linked Amenities."""
+            amenity_list = []
+            for amenity in list(models.storage.all(Amenity).values()):
+                 if amenity.id in self.amenity_ids:
+                    amenity_list.append(amenity)
+            return amenity_list
+
+        @amenities.setter
+        def amenities(self, value):
+            if type(value) == Amenity:
+                self.amenity_ids.append(value.id)
