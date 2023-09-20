@@ -61,17 +61,17 @@ class BaseModel:
         storage.save()
 
     def to_dict(self):
-        """Convert instance into dict format"""
+        """Converts instance into dict format"""
         dct = self.__dict__.copy()
         dct['__class__'] = self.__class__.__name__
-        for k in dct:
-            if type(dct[k]) is datetime:
-                dct[k] = dct[k].isoformat()
+        for key in dct:
+            if type(dct[key]) is datetime:
+                dct[key] = dct[key].isoformat()
         if '_sa_instance_state' in dct.keys():
             del(dct['_sa_instance_state'])
         return dct
 
     def delete(self):
-        '''deletes the current instance from the storage'''
+        """Deletes the current instance from the storage"""
         from models import storage
         storage.delete(self)
