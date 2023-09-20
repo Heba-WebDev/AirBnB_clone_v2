@@ -47,7 +47,7 @@ class Place(BaseModel, Base):
             """Get a list of all linked Amenities."""
             amenity_list = []
             for amenity in list(models.storage.all(Amenity).values()):
-                 if amenity.id in self.amenity_ids:
+                if amenity.id in self.amenity_ids:
                     amenity_list.append(amenity)
             return amenity_list
 
