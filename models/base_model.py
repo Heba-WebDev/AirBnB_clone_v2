@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""BaseModel class for AirBnB Clone"""
+"""BaseModel class for AirBnB clone"""
 from sqlalchemy.ext.declarative import declarative_base
 import uuid
 import models
@@ -11,7 +11,7 @@ Base = declarative_base()
 
 
 class BaseModel:
-    """ BaseModel Class """
+    """BaseModel Class"""
     id = Column(String(60), unique=True, nullable=False, primary_key=True)
     created_at = Column(DateTime, nullable=False, default=(datetime.utcnow()))
     updated_at = Column(DateTime, nullable=False, default=(datetime.utcnow()))
@@ -43,22 +43,22 @@ class BaseModel:
             self.created_at = self.updated_at = datetime.now()
 
     def __str__(self):
-        """returns a string of class name, id, and dictionary"""
+        """Returns a string representation of the instant"""
         return "[{}] ({}) {}".format(
             type(self).__name__, self.id, self.__dict__)
 
     def __repr__(self):
-        """returns a string representaion"""
+        """Returns a string representaion of the instant"""
         return self.__str__()
 
     def save(self):
-        """Updates the public instance updated_at to current"""
+        """Updates the public instance attribute updated_at to current"""
         self.updated_at = datetime.now()
         models.storage.new(self)
         models.storage.save()
 
     def to_dict(self):
-        """Creates key/value pair of instance"""
+        """Returns a dictionary of all the key values in __dict__"""
         my_dict = dict(self.__dict__)
         my_dict["__class__"] = str(type(self).__name__)
         my_dict["created_at"] = self.created_at.isoformat()
@@ -68,5 +68,5 @@ class BaseModel:
         return my_dict
 
     def delete(self):
-        """ Deletes object """
+        """ Deletes Instant """
         models.storage.delete(self)

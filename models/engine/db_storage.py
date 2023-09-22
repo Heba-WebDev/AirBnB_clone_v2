@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" new class for sqlAlchemy """
+""" New class instant """
 from os import getenv
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import (create_engine)
@@ -14,7 +14,7 @@ from models.amenity import Amenity
 
 
 class DBStorage:
-    """ create tables in environmental"""
+    """ Creates tables in environmental"""
     __engine = None
     __session = None
 
@@ -33,10 +33,7 @@ class DBStorage:
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        """returns a dictionary
-        Return:
-            returns a dictionary of __object
-        """
+        """ Returns a dictionary of __object """
         dic = {}
         if cls:
             if type(cls) is str:
@@ -55,30 +52,25 @@ class DBStorage:
         return (dic)
 
     def new(self, obj):
-        """add a new element in the table
-        """
+        """ Adds a new obj to the database """
         self.__session.add(obj)
 
     def save(self):
-        """save changes
-        """
+        """ Saves changes to the database """
         self.__session.commit()
 
     def delete(self, obj=None):
-        """delete an element in the table
-        """
+        """ Deletes an obj from the database """
         if obj:
             self.session.delete(obj)
 
     def reload(self):
-        """configuration
-        """
+        """ Configuration for database"""
         Base.metadata.create_all(self.__engine)
         sec = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(sec)
         self.__session = Session()
 
     def close(self):
-        """ calls remove()
-        """
+        """ Removes from database """
         self.__session.close()
