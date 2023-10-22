@@ -16,7 +16,8 @@ def hbnb_page():
 
 @app.route("/c/<text>", strict_slashes=False)
 def c_page(text):
-    return "C is {}".format(text)
+    text = text.replace('_', ' ')
+    return "C {}".format(text)
 
 
 if __name__ == '__main__':
