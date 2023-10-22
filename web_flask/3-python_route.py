@@ -20,10 +20,10 @@ def c_page(text):
     return "C {}".format(text)
 
 
-@app.route("/python/", defaults={'text': 'is cool'} ,strict_slashes=False)
+@app.route("/python/", defaults={'text': 'is cool'}, strict_slashes=False)
 def python_page(text):
     text = text.replace('_', ' ')
-    return "Python {}".format(text)
+    return ("Python {}".format(text))
 
 
 if __name__ == '__main__':
