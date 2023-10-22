@@ -14,9 +14,9 @@ def hbnb_page():
     return "HBNB"
 
 
-@app.route("/c/{value}", strict_slashes=False)
-def c_page():
-    return "C is {value}"
+@app.route("/c/<text>", strict_slashes=False)
+def c_page(text):
+    return "C is {}".format(text)
 
 
 if __name__ == '__main__':
