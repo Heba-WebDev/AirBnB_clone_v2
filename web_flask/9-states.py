@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" module doc """
+""" States and State """
 from flask import Flask
 from flask import render_template
 from models import storage
@@ -54,6 +54,13 @@ def states_list():
     """ States """
     states = storage.all(State)
     return render_template('7-states_list.html', states=states)
+
+
+@app.route('/cities_by_states', strict_slashes=False)
+def cities_list():
+    """ Cities """
+    states = storage.all(State)
+    return render_template('8-cities_by_states.html', states=states)
 
 
 @app.teardown_appcontext
