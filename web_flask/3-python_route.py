@@ -23,7 +23,7 @@ def c_page(text):
 @app.route("/python/<text>", strict_slashes=False)
 def python_page(text):
     text = text.replace('_', ' ')
-    return "C {}".format(text)
+    return "Python {}".format(text)
 
 
 if __name__ == '__main__':
